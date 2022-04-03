@@ -8,18 +8,18 @@ use object::{
 
 use crate::cortexm;
 
-pub(crate) struct Elf<'file> {
+pub struct Elf<'file> {
     elf: ObjectFile<'file>,
     symbols: Symbols,
-    pub(crate) live_functions: HashSet<&'file str>,
-    pub(crate) defmt_table: Option<Table>,
-    pub(crate) defmt_locations: Option<Locations>,
-    pub(crate) debug_frame: DebugFrame<'file>,
-    pub(crate) vector_table: cortexm::VectorTable,
+    pub live_functions: HashSet<&'file str>,
+    pub defmt_table: Option<Table>,
+    pub defmt_locations: Option<Locations>,
+    pub debug_frame: DebugFrame<'file>,
+    pub vector_table: cortexm::VectorTable,
 }
 
 impl<'file> Elf<'file> {
-    pub(crate) fn parse(elf_bytes: &'file [u8]) -> Result<Self, anyhow::Error> {
+    pub fn parse(elf_bytes: &'file [u8]) -> Result<Self, anyhow::Error> {
         let elf = ObjectFile::parse(elf_bytes)?;
 
         let live_functions = extract_live_functions(&elf)?;
@@ -43,15 +43,15 @@ impl<'file> Elf<'file> {
         })
     }
 
-    pub(crate) fn main_fn_address(&self) -> u32 {
+    pub fn main_fn_address(&self) -> u32 {
         self.symbols.main_fn_address
     }
 
-    pub(crate) fn program_uses_heap(&self) -> bool {
+    pub fn program_uses_heap(&self) -> bool {
         self.symbols.program_uses_heap
     }
 
-    pub(crate) fn rtt_buffer_address(&self) -> Option<u32> {
+    pub fn rtt_buffer_address(&self) -> Option<u32> {
         self.symbols.rtt_buffer_address
     }
 }

@@ -36,7 +36,7 @@ const CANARY_VALUE: u8 = 0xAA;
 /// "touched" (any of its bytes != `CANARY_VALUE`) then that is considered to be a *potential* stack
 /// overflow.
 #[derive(Clone, Copy)]
-pub(crate) struct Canary {
+pub struct Canary {
     address: u32,
     size: usize,
     stack_available: u32,
@@ -46,7 +46,7 @@ pub(crate) struct Canary {
 
 impl Canary {
     /// Decide if and where to place the stack canary.
-    pub(crate) fn install(
+    pub fn install(
         sess: &mut Session,
         target_info: &TargetInfo,
         elf: &Elf,
@@ -115,7 +115,7 @@ impl Canary {
         }))
     }
 
-    pub(crate) fn touched(self, core: &mut probe_rs::Core, elf: &Elf) -> anyhow::Result<bool> {
+    pub fn touched(self, core: &mut probe_rs::Core, elf: &Elf) -> anyhow::Result<bool> {
         let size_kb = self.size as f64 / 1024.0;
         if self.measure_stack {
             log::info!(
